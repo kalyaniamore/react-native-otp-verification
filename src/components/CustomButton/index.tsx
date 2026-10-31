@@ -8,6 +8,7 @@ export function CustomButton({
   onPress,
   disabled = false,
   loading = false,
+  loadingTitle = title,
   accessibilityLabel,
 }: CustomButtonProps) {
   const isDisabled = disabled || loading;
@@ -26,7 +27,7 @@ export function CustomButton({
       ]}>
       <View style={styles.content}>
         {loading ? <CustomLoader /> : null}
-        <Text style={styles.title}>{loading ? 'Verifying...' : title}</Text>
+        <Text style={styles.title}>{loading ? loadingTitle : title}</Text>
       </View>
     </Pressable>
   );

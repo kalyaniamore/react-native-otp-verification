@@ -1,4 +1,12 @@
-import type { OTPVerificationStatus } from '../../types/otp.types';
+import type { OTPServiceResponse, OTPVerificationStatus } from '../../types/otp.types';
+
+export interface OTPVerificationScreenProps {
+  title?: string;
+  description?: string;
+  destination?: string;
+  onVerify?: (otp: string) => Promise<OTPServiceResponse>;
+  onResend?: () => Promise<OTPServiceResponse>;
+}
 
 export interface OTPVerificationViewModel {
   otp: string;
