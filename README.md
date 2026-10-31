@@ -1,6 +1,6 @@
 # Secure Verify
 
-A lightweight React Native + TypeScript OTP verification screen built with native components. The default mock accepts `1234`, simulates an asynchronous request, and allows a new code to be requested after a 60-second cooldown.
+A lightweight React Native + TypeScript OTP verification screen built with native components. The local mock accepts `1234`; other codes are rejected. Verification and resend each simulate an 800 ms network delay. Resend becomes available after a 60-second cooldown.
 
 The app is named **Secure Verify** and uses the OTP illustration as its launcher icon on iOS and Android.
 
@@ -8,13 +8,13 @@ The app is named **Secure Verify** and uses the OTP illustration as its launcher
 
 - Four numeric digits with native one-time-code autofill support.
 - Accessible input, button states, and live verification feedback.
-- Mock verification with loading, success, and error states.
+- Mock verification with loading, success, and error states; only `1234` succeeds.
 - Resend cooldown starts on screen entry and restarts after a successful resend.
 - Reusable screen copy, destination label, and injectable verification/resend handlers.
 - OTP UI, accessibility, and status-message copy is centralized in `src/constants/otp.strings.ts`.
 - No OTP-specific or UI component dependencies.
 
-The demo logs the submitted code to the console to meet the exercise requirement. Never log real OTPs in a production application.
+In development builds, the submitted OTP is logged to the console to meet the exercise requirement. OTP logging is disabled in production builds. Never log real OTPs in a production authentication flow.
 
 ## Run the app
 
