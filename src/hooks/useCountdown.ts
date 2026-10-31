@@ -2,20 +2,25 @@ import { useEffect, useState } from 'react';
 
 export function useCountdown(initialSeconds: number) {
   const [secondsRemaining, setSecondsRemaining] = useState(initialSeconds);
+  const [deadline, setDeadline] = useState(() => Date.now() + initialSeconds * 1000);
 
   useEffect(() => {
-    if (secondsRemaining <= 0) {
-      return undefined;
-    }
+    const timer = setInterval(() => {
+      const remaining = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+      setSecondsRemaining(remaining);
 
-    const timer = setTimeout(() => {
-      setSecondsRemaining(current => Math.max(0, current - 1));
+      if (remaining === 0) {
+        clearInterval(timer);
+      }
     }, 1000);
 
-    return () => clearTimeout(timer);
-  }, [secondsRemaining]);
+    return () => clearInterval(timer);
+  }, [deadline]);
 
-  const reset = () => setSecondsRemaining(initialSeconds);
+  const reset = () => {
+    setSecondsRemaining(initialSeconds);
+    setDeadline(Date.now() + initialSeconds * 1000);
+  };
 
   return { secondsRemaining, reset };
 }

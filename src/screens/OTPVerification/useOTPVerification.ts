@@ -1,13 +1,24 @@
 import { useRef, useState } from 'react';
 import { useCountdown } from '../../hooks/useCountdown';
+import { otpCopy } from '../../constants/otp.strings';
 import { RESEND_COUNTDOWN_SECONDS } from '../../constants/otp.constants';
 import { requestOTP, verifyOTP } from '../../services/otpService';
 import { isValidOTP, sanitizeOTP } from '../../utils/otpUtils';
-import type { OTPVerificationViewModel } from './types';
+import type {
+  OTPVerificationScreenProps,
+  OTPVerificationViewModel,
+} from './types';
 
-export function useOTPVerification(): OTPVerificationViewModel {
+export function useOTPVerification({
+  onVerify: verify = verifyOTP,
+  onResend: resend = requestOTP,
+}: Pick<
+  OTPVerificationScreenProps,
+  'onVerify' | 'onResend'
+> = {}): OTPVerificationViewModel {
   const [otp, setOtp] = useState('');
-  const [status, setStatus] = useState<OTPVerificationViewModel['status']>('idle');
+  const [status, setStatus] =
+    useState<OTPVerificationViewModel['status']>('idle');
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const requestInProgress = useRef(false);
@@ -26,7 +37,7 @@ export function useOTPVerification(): OTPVerificationViewModel {
 
     if (!isValidOTP(otp)) {
       setStatus('error');
-      setMessage('Enter a valid four-digit code.');
+      setMessage(otpCopy.invalidCode);
       return;
     }
 
@@ -35,16 +46,18 @@ export function useOTPVerification(): OTPVerificationViewModel {
     setStatus('loading');
     setMessage('');
 
-    // Assessment-only requirement; never log real OTPs in production.
-    console.log('OTP submitted for assessment:', otp);
+    if (__DEV__) {
+      // Assessment-only requirement; never log real OTPs in production.
+      console.log(otpCopy.otpLogLabel, otp);
+    }
 
     try {
-      const response = await verifyOTP(otp);
+      const response = await verify(otp);
       setStatus(response.status);
       setMessage(response.message);
     } catch {
       setStatus('error');
-      setMessage('Verification could not be completed. Try again.');
+      setMessage(otpCopy.verificationFailure);
     } finally {
       requestInProgress.current = false;
       setIsLoading(false);
@@ -62,15 +75,16 @@ export function useOTPVerification(): OTPVerificationViewModel {
     setMessage('');
 
     try {
-      const response = await requestOTP();
+      const response = await resend();
       setStatus(response.status);
       setMessage(response.message);
       if (response.status === 'success') {
+        setOtp('');
         reset();
       }
     } catch {
       setStatus('error');
-      setMessage('A new code could not be sent. Try again.');
+      setMessage(otpCopy.resendFailure);
     } finally {
       requestInProgress.current = false;
       setIsLoading(false);

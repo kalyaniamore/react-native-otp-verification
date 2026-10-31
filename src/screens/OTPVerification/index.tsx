@@ -1,12 +1,21 @@
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CustomButton } from '../../components/CustomButton';
 import { CustomInput } from '../../components/CustomInput';
+import { otpCopy } from '../../constants/otp.strings';
 import { OTP_LENGTH } from '../../constants/otp.constants';
+import { isValidOTP } from '../../utils/otpUtils';
 import { styles } from './styles';
+import type { OTPVerificationScreenProps } from './types';
 import { useOTPVerification } from './useOTPVerification';
 
-export function OTPVerificationScreen() {
+export function OTPVerificationScreen({
+  title = otpCopy.title,
+  description = otpCopy.description,
+  destination,
+  onVerify: verifyHandler,
+  onResend: resendHandler,
+}: OTPVerificationScreenProps = {}) {
   const {
     otp,
     status,
@@ -17,27 +26,37 @@ export function OTPVerificationScreen() {
     onOTPChange,
     onVerify,
     onResend,
-  } = useOTPVerification();
+  } = useOTPVerification({ onVerify: verifyHandler, onResend: resendHandler });
 
   const feedbackStyle = status === 'success' ? styles.success : styles.error;
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+      <ScrollView
+        contentContainerStyle={styles.content}
+        keyboardDismissMode="on-drag"
+        keyboardShouldPersistTaps="handled">
         <View style={styles.form}>
-          <Text style={styles.eyebrow}>
-            Account security
-          </Text>
-          <Text style={styles.title}>
-            Verify your number
-          </Text>
-          <Text style={styles.description}>
-            Enter the four-digit code sent to your registered mobile number.
-          </Text>
+          <Image
+            accessibilityLabel={otpCopy.illustrationAccessibilityLabel}
+            resizeMode="contain"
+            source={require('../../assets/images/otp-verification.png')}
+            style={styles.illustration}
+          />
+          <Text style={styles.eyebrow}>{otpCopy.secureVerification}</Text>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.description}>{description}</Text>
 
-          <Text style={styles.inputLabel}>Verification code</Text>
+          {destination ? (
+            <View style={styles.destination}>
+              <Text style={styles.destinationLabel}>{otpCopy.codeSentTo}</Text>
+              <Text style={styles.destinationValue}>{destination}</Text>
+            </View>
+          ) : null}
+
+          <Text style={styles.inputLabel}>{otpCopy.verificationCode}</Text>
           <CustomInput
-            accessibilityLabel="Four-digit verification code"
+            accessibilityLabel={otpCopy.inputAccessibilityLabel}
             editable={!isLoading}
             length={OTP_LENGTH}
             onChangeText={onOTPChange}
@@ -50,16 +69,19 @@ export function OTPVerificationScreen() {
           </Text>
 
           <CustomButton
-            accessibilityLabel="Verify code"
-            disabled={!otp}
+            accessibilityLabel={otpCopy.verifyAccessibilityLabel}
+            disabled={!isValidOTP(otp)}
             loading={isLoading && status === 'loading'}
+            loadingTitle={otpCopy.verifying}
             onPress={onVerify}
-            title="Verify"
+            title={otpCopy.verify}
           />
 
           <Pressable
             accessibilityLabel={
-              canResend ? 'Resend verification code' : `Resend code in ${secondsUntilResend} seconds`
+              canResend
+                ? otpCopy.resendAccessibilityLabel
+                : otpCopy.resendCountdown(secondsUntilResend)
             }
             accessibilityRole="button"
             accessibilityState={{ disabled: !canResend }}
@@ -67,9 +89,12 @@ export function OTPVerificationScreen() {
             onPress={onResend}
             style={styles.resendButton}>
             <Text style={[styles.resendText, !canResend && styles.resendDisabled]}>
-              {canResend ? 'Resend code' : `Resend code in ${secondsUntilResend}s`}
+              {canResend ? otpCopy.resend : otpCopy.resendCountdownShort(secondsUntilResend)}
             </Text>
           </Pressable>
+          <Text style={styles.securityNote}>
+            {otpCopy.securityNote}
+          </Text>
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -3,5 +3,6 @@ export interface CustomButtonProps {
   onPress: () => void;
   disabled?: boolean;
   loading?: boolean;
+  loadingTitle?: string;
   accessibilityLabel?: string;
 }
