@@ -1,0 +1,1 @@
+export { OTPVerificationScreen } from '../screens/OTPVerification';

@@ -1,0 +1,14 @@
+export const colors = {
+  background: '#F3F7F5',
+  surface: '#FFFFFF',
+  disabledSurface: '#E8EFEC',
+  text: '#19332D',
+  mutedText: '#64766F',
+  primary: '#176B58',
+  primaryPressed: '#105544',
+  onPrimary: '#FFFFFF',
+  border: '#C9D8D2',
+  disabled: '#9BAFA7',
+  success: '#24744D',
+  error: '#B33F3F',
+} as const;
