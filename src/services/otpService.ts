@@ -1,5 +1,5 @@
 import { MOCK_NETWORK_DELAY_MS } from '../constants/otp.constants';
-import { otpCopy } from '../constants/otp.strings';
+import { otpStrings } from '../constants/otp.strings';
 import type { OTPServiceResponse } from '../types/otp.types';
 
 function simulateNetworkDelay(): Promise<void> {
@@ -10,13 +10,13 @@ export async function verifyOTP(otp: string): Promise<OTPServiceResponse> {
   await simulateNetworkDelay();
 
   if (otp === '1234') {
-    return { status: 'success', message: otpCopy.verificationSuccess };
+    return { status: 'success', message: otpStrings.verificationSuccess };
   }
 
-  return { status: 'error', message: otpCopy.incorrectCode };
+  return { status: 'error', message: otpStrings.incorrectCode };
 }
 
 export async function requestOTP(): Promise<OTPServiceResponse> {
   await simulateNetworkDelay();
-  return { status: 'success', message: otpCopy.resendSuccess };
+  return { status: 'success', message: otpStrings.resendSuccess };
 }

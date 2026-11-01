@@ -3,6 +3,7 @@ import { CustomLoader } from '../CustomLoader';
 import { styles } from './styles';
 import type { CustomButtonProps } from './types';
 
+/** Renders an accessible action button with disabled and in-progress states. */
 export function CustomButton({
   title,
   onPress,
@@ -24,7 +25,8 @@ export function CustomButton({
         styles.button,
         pressed && !isDisabled && styles.pressed,
         isDisabled && styles.disabled,
-      ]}>
+      ]}
+    >
       <View style={styles.content}>
         {loading ? <CustomLoader /> : null}
         <Text style={styles.title}>{loading ? loadingTitle : title}</Text>

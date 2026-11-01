@@ -3,6 +3,7 @@ import { colors } from '../../theme/colors';
 import { dimensions } from '../../theme/dimensions';
 import { typography } from '../../theme/typography';
 
+/** Shared button layout, interaction states, and label styling. */
 export const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
