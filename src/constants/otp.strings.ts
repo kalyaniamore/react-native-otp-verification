@@ -1,4 +1,4 @@
-export const otpCopy = {
+export const otpStrings = {
   title: 'Verify your number',
   description: 'Enter the four-digit code sent to your registered mobile number.',
   secureVerification: 'SECURE VERIFICATION',

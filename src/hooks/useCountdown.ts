@@ -1,8 +1,17 @@
 import { useEffect, useState } from 'react';
 
+/**
+ * Tracks a countdown against an absolute deadline so delayed timer ticks do not extend it.
+ * The interval is cleared when the countdown reaches zero or the hook's component unmounts.
+ *
+ * @param initialSeconds Initial duration and duration restored by `reset`.
+ * @returns The remaining whole seconds and a function to restart the countdown.
+ */
 export function useCountdown(initialSeconds: number) {
   const [secondsRemaining, setSecondsRemaining] = useState(initialSeconds);
-  const [deadline, setDeadline] = useState(() => Date.now() + initialSeconds * 1000);
+  const [deadline, setDeadline] = useState(
+    () => Date.now() + initialSeconds * 1000,
+  );
 
   useEffect(() => {
     const timer = setInterval(() => {

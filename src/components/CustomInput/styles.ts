@@ -4,6 +4,7 @@ import { dimensions } from '../../theme/dimensions';
 import { spacing } from '../../theme/spacing';
 import { typography } from '../../theme/typography';
 
+/** Layout and visual states for the digit input and its overlaid native text field. */
 export const styles = StyleSheet.create({
   container: {
     height: dimensions.inputHeight,

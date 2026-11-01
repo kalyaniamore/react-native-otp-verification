@@ -4,6 +4,7 @@ import { dimensions } from '../../theme/dimensions';
 import { spacing } from '../../theme/spacing';
 import { typography } from '../../theme/typography';
 
+/** Screen layout and feedback styles, composed from the shared theme tokens. */
 export const styles = StyleSheet.create({
   safeArea: {
     backgroundColor: colors.background,

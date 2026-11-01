@@ -1,15 +1,19 @@
 import { useState } from 'react';
 import { Keyboard, Text, TextInput, View } from 'react-native';
-import { otpCopy } from '../../constants/otp.strings';
+import { otpStrings } from '../../constants/otp.strings';
 import { styles } from './styles';
 import type { CustomInputProps } from './types';
 
+/**
+ * Renders a controlled, accessible digit input with a separate visual cell for each digit.
+ * The native text input supports numeric entry and operating-system one-time-code autofill.
+ */
 export function CustomInput({
   value,
   onChangeText,
   length = 4,
   editable = true,
-  accessibilityLabel = otpCopy.inputAccessibilityLabel,
+  accessibilityLabel = otpStrings.inputAccessibilityLabel,
 }: CustomInputProps) {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -51,7 +55,7 @@ export function CustomInput({
       </View>
       <TextInput
         accessibilityLabel={accessibilityLabel}
-        accessibilityHint={otpCopy.inputAccessibilityHint}
+        accessibilityHint={otpStrings.inputAccessibilityHint}
         accessibilityRole="text"
         autoCapitalize="none"
         autoComplete="one-time-code"

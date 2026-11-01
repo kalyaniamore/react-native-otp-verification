@@ -9,6 +9,10 @@ import type {
   OTPVerificationViewModel,
 } from './types';
 
+/**
+ * Coordinates OTP editing, mock service requests, request locking, and resend timing.
+ * Service handlers can be supplied by a consuming screen; local mocks are used by default.
+ */
 export function useOTPVerification({
   onVerify: verify = verifyOTP,
   onResend: resend = requestOTP,
